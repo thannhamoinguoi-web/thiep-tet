@@ -1,1 +1,229 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thiệp Chúc Tết</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+/* ===== BACKGROUND ===== */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: url("background tet.jpg") no-repeat center center fixed;
+    background-size: cover;
+    color: #fff;
+    overflow: hidden;
+}
+
+/* Lớp phủ tối */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    z-index: -1;
+}
+
+/* ===== CANH GIỮA TUYỆT ĐỐI ===== */
+.page {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    text-align: center;
+    transition: 1s ease;
+}
+
+.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(1.2);
+}
+
+/* ===== TRANG MỞ ===== */
+#openPage h1 {
+    font-size: 3rem;
+    margin-bottom: 25px;
+    text-shadow: 0 0 20px gold;
+}
+
+button {
+    padding: 14px 40px;
+    font-size: 1.2rem;
+    border-radius: 40px;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(45deg, gold, orange);
+    color: #8b0000;
+    box-shadow: 0 0 20px gold;
+    transition: 0.3s;
+    margin-top: 20px;
+}
+
+button:hover {
+    transform: scale(1.1);
+}
+
+/* ===== THƯ ===== */
+.letter {
+    background: rgba(0,0,0,0.5);
+    padding: 35px;
+    border-radius: 25px;
+    max-width: 650px;
+    text-align: center;
+    animation: fadeIn 1.5s ease;
+}
+
+.letter h2 {
+    font-size: 2.2rem;
+    color: gold;
+    margin-bottom: 15px;
+}
+
+.letter p {
+    font-size: 1.2rem;
+    line-height: 1.8;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== CONFETTI ===== */
+.confetti {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: gold;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    from { transform: translateY(-10px); }
+    to { transform: translateY(110vh); }
+}
+
+/* ===== NÚT NHẠC ===== */
+#musicBtn {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    background: rgba(0,0,0,0.4);
+    padding: 10px 14px;
+    border-radius: 50%;
+    user-select: none;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== TRANG MỞ ===== -->
+<div class="page" id="openPage">
+    <h1>🧧 Chúc Mừng Năm Mới 🧧</h1>
+    <button onclick="openLetter()">MỞ THIỆP</button>
+</div>
+
+<!-- ===== THƯ 1 ===== -->
+<div class="page hidden" id="letterPage1">
+    <div class="letter">
+        <h2>Thư đầu năm ✨</h2>
+        <p>
+            Năm mới đến rồi,<br><br>
+            Chúc you luôn mạnh khỏe,<br>
+            mọi điều suôn sẻ và bình an 🍀<br><br>
+            Mong rằng mỗi ngày trôi qua<br>
+            đều mang đến cho you đều là niềm vui ❤️
+        </p>
+        <button onclick="nextLetter()">XEM TIẾP ➜</button>
+    </div>
+</div>
+
+<!-- ===== THƯ 2 ===== -->
+<div class="page hidden" id="letterPage2">
+    <div class="letter">
+        <h2>Lời chúc gửi riêng dành cho you </h2>
+        <p>
+            Cảm ơn đã làm bạn vơi me cx như <br><br>
+            Chúc you một năm mới thật rực rỡ,<br>
+            đạt được những điều mình mong muốn ✨<br><br>
+            Hy vọng chúng ta sẽ còn<br>
+            nhiều kỷ niệm đẹp phía trước 💖
+        </p>
+    </div>
+</div>
+
+<!-- ===== NÚT NHẠC ===== -->
+<div id="musicBtn" onclick="toggleMusic()">🎵</div>
+
+<!-- ===== NHẠC ===== -->
+<audio id="music" loop>
+    <source src="c:\Users\ndt22\Downloads\Xuân Yêu Xa.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+let isPlaying = false;
+const music = document.getElementById("music");
+const musicBtn = document.getElementById("musicBtn");
+
+function openLetter() {
+    document.getElementById("openPage").classList.add("hidden");
+    document.getElementById("letterPage1").classList.remove("hidden");
+
+    music.play().catch(()=>{});
+    musicBtn.textContent = "🔊";
+    isPlaying = true;
+    startConfetti();
+}
+
+function nextLetter() {
+    document.getElementById("letterPage1").classList.add("hidden");
+    document.getElementById("letterPage2").classList.remove("hidden");
+}
+
+function toggleMusic() {
+    if (isPlaying) {
+        music.pause();
+        musicBtn.textContent = "🎵";
+    } else {
+        music.play();
+        musicBtn.textContent = "🔊";
+    }
+    isPlaying = !isPlaying;
+}
+
+function startConfetti() {
+    for (let i = 0; i < 60; i++) {
+        const c = document.createElement("div");
+        c.className = "confetti";
+        c.style.left = Math.random() * 100 + "vw";
+        c.style.animationDuration = 3 + Math.random() * 4 + "s";
+        c.style.opacity = Math.random();
+        document.body.appendChild(c);
+    }
+}
+</script>
+
+</body>
+</html>
 
